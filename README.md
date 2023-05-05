@@ -1,2 +1,2 @@
 # winpyano
-Lightweight Python recreation of WinPiano (by ).
+Lightweight Python recreation of WinPiano (by Gregor Brecko).
