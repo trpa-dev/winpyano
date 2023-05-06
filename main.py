@@ -18,11 +18,6 @@ else:
 class Config():
     """
     A Config class to handle key and signal states
-
-    Decrease instrument value in prepared message
-    Increase instrument value in prepared message
-    Decrease octave value in prepared message
-    Increase octave value in prepared message
     """
     def __init__(self):
         self.instrument = 0
