@@ -15,7 +15,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 * Python 3.7+
-* (python-rtmidi)[https://github.com/SpotlightKid/python-rtmidi]
+* [python-rtmidi](https://github.com/SpotlightKid/python-rtmidi)
 
 ### Installation
 * Download main.py from this repo.
