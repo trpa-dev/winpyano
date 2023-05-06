@@ -33,8 +33,9 @@ press any of these keys to play a corresponding note
 ## Roadmap
 * Initial MVP - X
 * Code Cleanup
-* GUI extention to actually recreate the old UI?
-* Might as well 
+* GUI extention to actually recreate the old UI? (might as well, not yet sure on shareware licenses) 
+* Recording and replaying (export and import MIDI or some custom file type)
+* This allows for demo playbacks
 
 ## License
 Licensed under GPL-3.0.
