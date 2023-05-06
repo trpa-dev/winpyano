@@ -1,9 +1,14 @@
+"""
+Module for key event handler (GUI)
+Module for sending MIDI signals to C++
+"""
 from tkinter import Tk, Frame
+from rtmidi import MidiOut
 
-import rtmidi
 
-midiout = rtmidi.MidiOut()
+midiout = MidiOut()
 available_ports = midiout.get_ports()
+
 
 if available_ports:
     midiout.open_port(0)
@@ -11,6 +16,14 @@ else:
     midiout.open_virtual_port("My virtual output")
 
 class Config():
+    """
+    A Config class to handle key and signal states
+
+    Decrease instrument value in prepared message
+    Increase instrument value in prepared message
+    Decrease octave value in prepared message
+    Increase octave value in prepared message
+    """
     def __init__(self):
         self.instrument = 0
         self.octave = 0
@@ -29,22 +42,32 @@ class Config():
         self.state = { key : False for key in self.translate }
 
     def decrement_instrument(self):
-        if self.instrument > 0: self.instrument = self.instrument - 1
+        """Decrease instrument value in prepared message"""
+        if self.instrument > 0:
+            self.instrument = self.instrument - 1
 
     def increment_instrument(self):
-        if self.instrument < 127: self.instrument = self.instrument + 1
+        """Increase instrument value in prepared message"""
+        if self.instrument < 127:
+            self.instrument = self.instrument + 1
 
     def decrease_octave(self):
-        if self.octave > -3: self.octave = self.octave - 1
+        """Decrease octave value in prepared message"""
+        if self.octave > -3:
+            self.octave = self.octave - 1
 
     def increase_octave(self):
-        if self.ocave < 4: self.octave = self.octave + 1
+        """Increase octave value in prepared message"""
+        if self.octave < 4:
+            self.octave = self.octave + 1
 
 config = Config()
 
-def keyup(e):
-    global config
-    if e.char in [' ']:
+def keyup(event):
+    """
+    Handle KeyRelease events and sent signals based on the key
+    """
+    if event.char in [' ']:
         config.sustain = False
         for key in config.sustain_release:
             config.state[key] = False
@@ -56,46 +79,48 @@ def keyup(e):
                   ]
                 )
             config.sustain_release.clear()
-    elif not config.sustain and e.char in config.state:
-        config.state[e.char] = False
+    elif not config.sustain and event.char in config.state:
+        config.state[event.char] = False
         midiout.send_message(
                 [ 0x90,
-                  config.translate[e.char] + (config.octave * 12),
+                  config.translate[event.char] + (config.octave * 12),
                   0
                   ]
                 )
     elif config.sustain:
-        config.sustain_release[e.char] = False
+        config.sustain_release[event.char] = False
 
-def keydown(e):
-    global config
-    if e.char in config.state and not config.state[e.char]:
-        config.state[e.char] = True
-        if config.translate[e.char] > 0:
+def keydown(event):
+    """
+    Handle KeyPress events and sent signals based on the key
+    """
+    if event.char in config.state and not config.state[event.char]:
+        config.state[event.char] = True
+        if config.translate[event.char] > 0:
             midiout.send_message(
                 [ 0x90,
-                  config.translate[e.char] + (config.octave * 12),
+                  config.translate[event.char] + (config.octave * 12),
                   96
                   ]
                 )
-    if e.char in ['<']:
+    if event.char in ['<']:
         config.decrement_instrument()
         midiout.send_message([0xC0, config.instrument])
 
-    if e.char in ['>']:
+    if event.char in ['>']:
         config.increment_instrument()
         midiout.send_message([0xC0, config.instrument])
 
-    if e.char in ['_']:
+    if event.char in ['_']:
         config.decrease_octave()
 
-    if e.char in ['+']:
+    if event.char in ['+']:
         config.increase_octave()
 
-    if e.char in [' ']:
+    if event.char in [' ']:
         config.sustain = True
 
-    if e.char in ['!']:
+    if event.char in ['!']:
         root.destroy()
 
 root = Tk()
