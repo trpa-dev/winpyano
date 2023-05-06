@@ -18,6 +18,13 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pylint
+        apt-get install build-essential
+        apt-get install libasound-dev or libasound2-dev
+        apt-get install libjack0
+        apt-get install libjack-dev
+        apt-get install python-pip
+        apt-get install python-dev
+        pip install python-rtmidi
         # pip install python-rtmidi --install-option="--no-jack"
         # pip install -r requirements.txt
     - name: Analysing the code with pylint
