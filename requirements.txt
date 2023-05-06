@@ -1,1 +1,1 @@
-python-rtmidi --install-option="--no-alsa"
+python-rtmidi
