@@ -1,1 +1,1 @@
-python-rtmidi
+python-rtmidi --no-alsa
