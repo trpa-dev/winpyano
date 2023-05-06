@@ -1,12 +1,14 @@
+"""
+Module for key event handler (GUI)
+Module for sending MIDI signals to C++
+"""
 from tkinter import Tk, Frame
-print(Tk.__doc__)
-print(Frame.__doc__)
+from rtmidi import MidiOut
 
-import rtmidi
-print(rtmidi.__doc__)
 
-midiout = rtmidi.MidiOut()
+midiout = MidiOut()
 available_ports = midiout.get_ports()
+
 
 if available_ports:
     midiout.open_port(0)
@@ -35,31 +37,23 @@ class Config():
         self.state = { key : False for key in self.translate }
 
     def decrement_instrument(self):
-    """
-    Decrease instrument value in prepared message
-    """
-        if self.instrument > 0: 
+        """Decrease instrument value in prepared message"""
+        if self.instrument > 0:
             self.instrument = self.instrument - 1
 
     def increment_instrument(self):
-    """
-    Increase instrument value in prepared message
-    """
-        if self.instrument < 127: 
+        """Increase instrument value in prepared message"""
+        if self.instrument < 127:
             self.instrument = self.instrument + 1
 
     def decrease_octave(self):
-    """
-    Decrease octave value in prepared message
-    """
-        if self.octave > -3: 
+        """Decrease octave value in prepared message"""
+        if self.octave > -3:
             self.octave = self.octave - 1
 
     def increase_octave(self):
-    """
-    Increase octave value in prepared message
-    """
-        if self.octave < 4: 
+        """Increase octave value in prepared message"""
+        if self.octave < 4:
             self.octave = self.octave + 1
 
 config = Config()
